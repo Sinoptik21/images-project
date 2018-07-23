@@ -9,23 +9,29 @@ use yii\helpers\HtmlPurifier;
 
 <h1><?php echo Html::encode($user->username); ?></h1>
 <p><?php echo HtmlPurifier::process($user->about); ?></p>
-<hr/>
 
-<a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
-<a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Unsubscribe</a>
+<?php if ($currentUser && !$user->equals($currentUser)): ?>
+  <hr/>
+  <?php if (!$currentUser->isFollowing($user)): ?>
+    <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
+  <?php else: ?>
+    <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Unsubscribe</a>
+  <?php endif; ?>
 
-<hr/>
-
-<h5>Friends, who are also following <?php echo Html::encode($user->username); ?>: </h5>
-<div class="row">
-  <?php foreach ($currentUser->getMutualSubscriptionsTo($user) as $item): ?>
-    <div class="col-md-12">
-      <a href="<?php echo Url::to(['/user/profiles/view/', 'nickname' => ($item['nickname']) ? $item['nickname'] : $item['id']]); ?>">
-        <?php echo Html::encode($item['username']); ?>
-      </a>
+  <?php if ($mutualSubscriptions = $currentUser->getMutualSubscriptionsTo($user)): ?>
+    <hr/>
+    <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>: </h5>
+    <div class="row">
+      <?php foreach ($mutualSubscriptions as $item): ?>
+        <div class="col-md-12">
+          <a href="<?php echo Url::to(['/user/profiles/view/', 'nickname' => ($item['nickname']) ? $item['nickname'] : $item['id']]); ?>">
+            <?php echo Html::encode($item['username']); ?>
+          </a>
+        </div>
+      <?php endforeach; ?>
     </div>
-  <?php endforeach; ?>
-</div>
+  <?php endif; ?>
+<?php endif; ?>
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">
