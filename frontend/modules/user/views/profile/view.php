@@ -17,7 +17,7 @@ use dosamigos\fileupload\FileUpload;
 
 <img src="<?php echo $user->getPicture(); ?>" id="profile-picture" />
 
-<?php if ($currentUser->equals($user)): ?>
+<?php if ($currentUser && $currentUser->equals($user)): ?>
 
   <div class="alert alert-success display-none" id="profile-image-success">Profile image updated</div>
   <div class="alert alert-danger display-none" id="profile-image-fail"></div>
@@ -40,9 +40,10 @@ use dosamigos\fileupload\FileUpload;
       }',
     ],
   ]); ?>
+  <a href="<?php echo Url::to(['/user/profile/delete-picture']); ?>" class="btn btn-danger">Delete picture</a>
   <hr/>
 
-<?php else: ?>
+<?php elseif ($currentUser): ?>
 
   <?php if (!$currentUser->isFollowing($user)): ?>
     <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
