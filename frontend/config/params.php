@@ -6,8 +6,10 @@ return [
     'storagePath' => '@frontend/web/uploads/',
     'storageUri' => '/uploads/',
 
-    'profilePicture' => [
+    'postPicture' => [
         'maxWidth' => 1280,
         'maxHeight' => 1024,
     ],
+
+    'feedPostLimit' => 200,
 ];
