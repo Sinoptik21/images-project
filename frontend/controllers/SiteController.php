@@ -45,4 +45,12 @@ class SiteController extends Controller
         ]);
         return $this->render('index');
     }
+
+    /**
+     * About page
+     */
+    public function actionAbout()
+    {
+        return $this->render('about');
+    }
 }
